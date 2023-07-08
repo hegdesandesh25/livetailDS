@@ -29,7 +29,7 @@ def my_message(sid, data):
 def disconnect(sid):
     print('disconnect', sid)
 
-'''
+
 def move_items():
     try:
         # Use XREAD to read from the stream
@@ -37,12 +37,14 @@ def move_items():
         if items:
             for stream, message_list in items:
                 for id, message in message_list:
-                    item = message[b'message']  # Extract the message
+                    item = message[b'message'].decode('utf-8')  # Extract the message
                     #print(f"Emitting message: {item.decode('utf-8')}")
                     # Emit the item to all connected Socket.IO clients
-                    io.emit('new_item', item.decode('utf-8'))
+                    io.emit('new_item', item)
+                   # io.emit('new_item', item.decode('utf-8'))
     except redis.exceptions.RedisError as e:
         print(f"Error reading items from stream: {e}")
+
 '''
 # Define a function to move items from list to stream and emit them
 def move_items():
@@ -61,7 +63,7 @@ def move_items():
     except redis.exceptions.RedisError as e:
         print(f"Error moving items from list to stream: {e}")
 
-
+'''
 # Define a function to be called on exit
 def on_exit():
     print("Gracefully shutting down...")
@@ -69,6 +71,19 @@ def on_exit():
 
 atexit.register(on_exit)
 
+if __name__ == '__main__':
+    # Start the Socket.IO server in a separate thread
+    import eventlet.wsgi
+    import eventlet
+    eventlet.monkey_patch()
+
+    server = eventlet.listen(('0.0.0.0', 8000))
+    eventlet.spawn(eventlet.wsgi.server, server, app)
+
+    while True:
+        move_items()
+        time.sleep(0.01) 
+'''
 # Start the Socket.IO server in a separate thread
 import eventlet.wsgi
 eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 8000)), app)
@@ -76,3 +91,4 @@ eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 8000)), app)
 while True:
     move_items()
     time.sleep(0.01)  # Sleep for a bit to avoid busy-waiting
+'''
