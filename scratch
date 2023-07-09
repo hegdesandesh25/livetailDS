@@ -2,3 +2,4 @@ pip install redis python-socketio flask
 pip install socket.io-emitter 
 pip install eventlet 
 pip install websocket-client 
+npm install react-window

@@ -5,6 +5,8 @@ sio = socketio.Client()
 @sio.event
 def connect():
     print("Connected to server")
+    print("Requesting initial logs...")
+    sio.emit('get_more_logs', 0)  # Request initial logs from server
 
 @sio.on('new_item')
 def on_new_item(data):
