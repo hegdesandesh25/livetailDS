@@ -3,3 +3,5 @@ pip install socket.io-emitter
 pip install eventlet 
 pip install websocket-client 
 npm install react-window
+npm install antd --save
+ npm install react-window-infinite-loader 
