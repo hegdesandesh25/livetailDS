@@ -33,7 +33,7 @@ def my_message(sid, data):
 def disconnect(sid):
     print('disconnect', sid)
 
-'''
+
 def move_items():
     try:
         # Use XREAD to read from the stream
@@ -50,20 +50,7 @@ def move_items():
         print(f"Error reading items from stream: {e}")
 
 '''
-'''
-def lift_shift_items(key):
-    try:
-        items = r.lrange(key, 0, Log_stream_size - 1)
-        if items:
-            pipeline = r.pipeline()
-            for item in items:
-                pipeline.xadd(key, {'message': item})
-                io.emit('new_item', item.decode('utf-8'))
-            pipeline.ltrim(key, len(items) - 1)
-            pipeline.execute()
-    except redis.exceptions.RedisError as e:
-        print(f"Error moving items from list to stream for key {key}: {e}")
-'''
+#working one
 def move_to_stream(key):
     try:
         
@@ -81,7 +68,7 @@ def move_to_stream(key):
             pipeline.execute()
     except redis.exceptions.RedisError as e:
         print(f"Error moving items from list to stream: {e}")
-
+'''
 
 @io.event
 def subscribe_stream(sid, stream):
@@ -103,6 +90,7 @@ def unsubscribe_stream(sid, stream):
     print(f"Client {sid} unsubscribed from stream: {stream}")
 
 '''
+old one
 # Define a function to move items from list to stream and emit them
 def move_items():
     try:
@@ -138,12 +126,12 @@ if __name__ == '__main__':
     server = eventlet.listen(('0.0.0.0', 8000))
     eventlet.spawn(eventlet.wsgi.server, server, app)
 
-    #while True:
-       # keys=list(r.scan_iter())
-       # for key in keys:
-       #     lift_shift_items(key)
-       #     time.sleep(0.01) 
+    while True:
+        move_items()
+        time.sleep(0.01)
 
+'''
+#working with moving list to streams
     with concurrent.futures.ThreadPoolExecutor() as executor:
         while True:
             keys = list(r.scan_iter())
@@ -155,6 +143,8 @@ if __name__ == '__main__':
                     future = executor.submit(move_to_stream, key)
                     futures.append(future)
             concurrent.futures.wait(futures)
+'''
+
 '''
 # Start the Socket.IO server in a separate thread
 import eventlet.wsgi

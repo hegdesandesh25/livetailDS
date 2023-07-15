@@ -2,11 +2,22 @@ import socketio
 
 sio = socketio.Client()
 
+
 @sio.event
 def connect():
     print("Connected to server")
     print("Requesting initial logs...")
     sio.emit('new_item', 0)  # Request initial logs from server
+
+
+'''subscribe to stream
+@sio.event
+def connect():
+    print("Connected to server")
+    print("Requesting initial logs...")
+    sio.emit('subscribe_stream', 'logstash-stream')  # Subscribe to the 'logstash' stream
+
+'''
 
 @sio.on('new_item')
 def on_new_item(data):

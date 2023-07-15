@@ -5,3 +5,9 @@ pip install websocket-client
 npm install react-window
 npm install antd --save
  npm install react-window-infinite-loader 
+ - As of now copy and emit is happening in server.py where the items from list are being copied onto streams
+ - streams do not have direct plugin from logstash
+ - started seeing memory issues with Redis (might need to set eviction policy etc to handle better)
+ - wsl was 2 GB, extended it to 4GB, still seeing memory issues set maxmemory in /etc/redis/redis.conf
+ - allkeys-lru: This policy will evict the least recently used (LRU) keys from the entire dataset, including keys without an expiration set. It considers all keys, whether volatile or not.
+ - maxmemory-policy allkeys-lru #cleared everything 
