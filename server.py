@@ -32,7 +32,7 @@ def my_message(sid, data):
 @io.event
 def disconnect(sid):
     print('disconnect', sid)
-
+'''
 
 def move_items():
     try:
@@ -68,7 +68,7 @@ def move_to_stream(key):
             pipeline.execute()
     except redis.exceptions.RedisError as e:
         print(f"Error moving items from list to stream: {e}")
-'''
+
 
 @io.event
 def subscribe_stream(sid, stream):
@@ -126,11 +126,8 @@ if __name__ == '__main__':
     server = eventlet.listen(('0.0.0.0', 8000))
     eventlet.spawn(eventlet.wsgi.server, server, app)
 
-    while True:
-        move_items()
-        time.sleep(0.01)
 
-'''
+
 #working with moving list to streams
     with concurrent.futures.ThreadPoolExecutor() as executor:
         while True:
@@ -143,7 +140,7 @@ if __name__ == '__main__':
                     future = executor.submit(move_to_stream, key)
                     futures.append(future)
             concurrent.futures.wait(futures)
-'''
+
 
 '''
 # Start the Socket.IO server in a separate thread
